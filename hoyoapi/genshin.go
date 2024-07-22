@@ -14,7 +14,6 @@ import (
 // Client that interfaces to HoYoLab endpoints related to Genshin Impact.
 // i.e., Spiral Abyss, Daily Reward
 type GenshinClient struct {
-	Cache    *middleware.Cache
 	Handler  *handler.Handler
 	Language string
 	UserId   int
@@ -28,13 +27,12 @@ func NewGenshinClient(options ClientOptions) *GenshinClient {
 
 	return &GenshinClient{
 		Handler:  &handler,
-		Cache:    middleware.NewCache(),
 		Language: options.language,
 		UserId:   options.userId,
 		Daily: components.NewDailyReward(
 			constants.GAME_GENSHIN,
 			options.language,
-			handler,
+			&handler,
 		),
 	}
 }

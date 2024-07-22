@@ -15,7 +15,12 @@ func main() {
 	language := "en-us"
 	userId := utilities.GetEnv("GENSHIN_UID", strconv.Atoi)
 
-	options := hoyoapi.NewClientOptions(ltokenV2, ltmidV2, ltuidV2, language, userId)
+	options := hoyoapi.NewClientOptions().
+		AddCookie(ltokenV2, ltmidV2, ltuidV2).
+		AddLanguage(language).
+		AddUserId(userId).
+		Build()
+
 	GenshinDailyReward(options)
 	StarRailDailyReward(options)
 	ZenlessDailyReward(options)

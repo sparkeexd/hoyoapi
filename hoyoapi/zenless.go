@@ -10,7 +10,6 @@ import (
 // Client that interfaces to HoYoLab endpoints related to Zenless Zone Zero.
 // i.e., Daily Reward
 type ZenlessClient struct {
-	Cache    *middleware.Cache
 	Handler  *handler.Handler
 	Language string
 	UserId   int
@@ -24,13 +23,12 @@ func NewZenlessClient(options ClientOptions) *ZenlessClient {
 
 	return &ZenlessClient{
 		Handler:  &handler,
-		Cache:    middleware.NewCache(),
 		Language: options.language,
 		UserId:   options.userId,
 		Daily: components.NewDailyReward(
 			constants.GAME_ZENLESS,
 			options.language,
-			handler,
+			&handler,
 		),
 	}
 }

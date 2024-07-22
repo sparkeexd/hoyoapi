@@ -22,6 +22,7 @@ const clientDefaultTimeout = 10 * time.Second
 type Handler struct {
 	client http.Client
 	middleware.Cookie
+	middleware.Cache
 }
 
 // Constructor.
@@ -33,7 +34,11 @@ func NewHandler(cookie middleware.Cookie) Handler {
 		MaxIdleConnsPerHost: 2,
 	}
 
-	handler := Handler{client: *client, Cookie: cookie}
+	handler := Handler{
+		client: *client,
+		Cookie: cookie,
+		Cache:  *middleware.NewCache(),
+	}
 	return handler
 }
 
