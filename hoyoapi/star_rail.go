@@ -10,6 +10,7 @@ import (
 // Client that interfaces to HoYoLab endpoints related to Star Rail.
 // i.e., Daily Reward
 type StarRailClient struct {
+	Cache    *middleware.Cache
 	Handler  *handler.Handler
 	Language string
 	UserId   int
@@ -23,12 +24,13 @@ func NewStarRailClient(options ClientOptions) *StarRailClient {
 
 	return &StarRailClient{
 		Handler:  &handler,
+		Cache:    middleware.NewCache(),
 		Language: options.language,
 		UserId:   options.userId,
 		Daily: components.NewDailyReward(
 			constants.GAME_STAR_RAIL,
 			options.language,
-			&handler,
+			handler,
 		),
 	}
 }

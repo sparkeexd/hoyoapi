@@ -28,7 +28,7 @@ func NewZenlessClient(options ClientOptions) *ZenlessClient {
 		Daily: components.NewDailyReward(
 			constants.GAME_ZENLESS,
 			options.language,
-			&handler,
+			handler,
 		),
 	}
 }

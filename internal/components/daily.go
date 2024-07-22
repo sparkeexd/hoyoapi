@@ -13,11 +13,11 @@ import (
 type DailyReward struct {
 	game     constants.Game
 	language string
-	handler  *handler.Handler
+	handler  handler.Handler
 }
 
 // Constructor.
-func NewDailyReward(game constants.Game, language string, handler *handler.Handler) DailyReward {
+func NewDailyReward(game constants.Game, language string, handler handler.Handler) DailyReward {
 	return DailyReward{
 		game:     game,
 		language: language,
