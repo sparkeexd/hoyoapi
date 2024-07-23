@@ -1,16 +1,15 @@
-package hoyoapi
+package client
 
 import (
+	"github.com/sparkeexd/hoyoapi/constants"
+	"github.com/sparkeexd/hoyoapi/handler"
 	"github.com/sparkeexd/hoyoapi/internal/components"
-	"github.com/sparkeexd/hoyoapi/internal/constants"
-	"github.com/sparkeexd/hoyoapi/internal/handler"
-	"github.com/sparkeexd/hoyoapi/internal/middleware"
+	"github.com/sparkeexd/hoyoapi/middleware"
 )
 
-// Client that interfaces to HoYoLab endpoints related to Star Rail.
+// Client that interfaces to HoYoLab endpoints related to Zenless Zone Zero.
 // i.e., Daily Reward
-type StarRailClient struct {
-	Cache    *middleware.Cache
+type ZenlessClient struct {
 	Handler  *handler.Handler
 	Language string
 	UserId   int
@@ -18,17 +17,16 @@ type StarRailClient struct {
 }
 
 // Constructor.
-func NewStarRailClient(options ClientOptions) *StarRailClient {
+func NewZenlessClient(options ClientOptions) *ZenlessClient {
 	cookie := middleware.NewCookie(options.ltokenV2, options.ltmidV2, options.ltuidV2)
 	handler := handler.NewHandler(cookie)
 
-	return &StarRailClient{
+	return &ZenlessClient{
 		Handler:  &handler,
-		Cache:    middleware.NewCache(),
 		Language: options.language,
 		UserId:   options.userId,
 		Daily: components.NewDailyReward(
-			constants.GAME_STAR_RAIL,
+			constants.GAME_ZENLESS,
 			options.language,
 			handler,
 		),

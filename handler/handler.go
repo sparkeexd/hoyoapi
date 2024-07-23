@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/sparkeexd/hoyoapi/internal/errors"
-	"github.com/sparkeexd/hoyoapi/internal/middleware"
+	"github.com/sparkeexd/hoyoapi/middleware"
 )
 
 // Default HTTP client timeout duration.

@@ -1,4 +1,4 @@
-package hoyoapi
+package client
 
 // Client options that are required by each game client i.e., cookies, language and in-game UID.
 type ClientOptions struct {

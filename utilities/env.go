@@ -3,6 +3,8 @@ package utilities
 import (
 	"fmt"
 	"os"
+
+	"github.com/sparkeexd/hoyoapi/internal/errors"
 )
 
 // Parsed error structure.
@@ -36,17 +38,19 @@ func getEnv[V any](envKey string, parse func(string) (V, error)) (V, error) {
 	rawValue, found := os.LookupEnv(envKey)
 	if !found {
 		var noResult V
-		return noResult, parseError{
-			message: fmt.Sprintf("Environment variable not set: %s", envKey),
-		}
+		return noResult, errors.NewError(
+			errors.ENV_VARIABLE_READ_ERROR,
+			fmt.Sprintf("Environment variable not set: %s", envKey),
+		)
 	}
 
 	parsedValue, err := parse(rawValue)
 	if err != nil {
 		var noResult V
-		return noResult, parseError{
-			message: fmt.Sprintf("Parsing %s value: %v", envKey, err),
-		}
+		return noResult, errors.NewError(
+			errors.ENV_VARIABLE_PARSE_ERROR,
+			fmt.Sprintf("Parsing %s value: %v", envKey, err),
+		)
 	}
 
 	return parsedValue, nil

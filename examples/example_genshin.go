@@ -3,23 +3,23 @@ package main
 import (
 	"net/http"
 
-	"github.com/sparkeexd/hoyoapi/hoyoapi"
-	"github.com/sparkeexd/hoyoapi/internal/constants"
-	"github.com/sparkeexd/hoyoapi/internal/handler"
-	"github.com/sparkeexd/hoyoapi/internal/middleware"
-	"github.com/sparkeexd/hoyoapi/internal/utilities"
+	"github.com/sparkeexd/hoyoapi/client"
+	"github.com/sparkeexd/hoyoapi/constants"
+	"github.com/sparkeexd/hoyoapi/handler"
+	"github.com/sparkeexd/hoyoapi/middleware"
+	"github.com/sparkeexd/hoyoapi/utilities"
 )
 
 // Claim Genshin daily rewards.
-func GenshinDailyReward(options hoyoapi.ClientOptions) {
-	genshin := hoyoapi.NewGenshinClient(options)
+func GenshinDailyReward(options client.ClientOptions) {
+	genshin := client.NewGenshinClient(options)
 	response, err := genshin.Daily.Claim()
 	utilities.PrintJSON(response, err)
 }
 
 // Get Spiral Abyss information.
-func GetSpiralAbyssInfo(options hoyoapi.ClientOptions) {
-	genshin := hoyoapi.NewGenshinClient(options)
+func GetSpiralAbyssInfo(options client.ClientOptions) {
+	genshin := client.NewGenshinClient(options)
 	response, err := genshin.SpiralAbyss(true)
 	utilities.PrintJSON(response, err)
 }

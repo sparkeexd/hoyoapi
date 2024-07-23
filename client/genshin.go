@@ -1,14 +1,14 @@
-package hoyoapi
+package client
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/sparkeexd/hoyoapi/constants"
+	"github.com/sparkeexd/hoyoapi/handler"
 	"github.com/sparkeexd/hoyoapi/internal/components"
-	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/internal/errors"
-	"github.com/sparkeexd/hoyoapi/internal/handler"
-	"github.com/sparkeexd/hoyoapi/internal/middleware"
+	"github.com/sparkeexd/hoyoapi/middleware"
 )
 
 // Client that interfaces to HoYoLab endpoints related to Genshin Impact.

@@ -12,6 +12,8 @@ const (
 	HTTP_RESPONSE_READ_ERROR
 	HTTP_RESPONSE_CLOSE_ERROR
 	REGION_SERVER_CODE_ERROR
+	ENV_VARIABLE_READ_ERROR
+	ENV_VARIABLE_PARSE_ERROR
 )
 
 // Internal error code text.
@@ -24,6 +26,8 @@ var errorCodeText = map[int]string{
 	HTTP_RESPONSE_READ_ERROR:   "HTTP Response Read Error",
 	HTTP_RESPONSE_CLOSE_ERROR:  "HTTP Response Close Error",
 	REGION_SERVER_CODE_ERROR:   "Region Server Code Error",
+	ENV_VARIABLE_READ_ERROR:    "Environment Variable Read Error",
+	ENV_VARIABLE_PARSE_ERROR:   "Environment Variable Parse Error",
 }
 
 // Returns a text for the internal error code.

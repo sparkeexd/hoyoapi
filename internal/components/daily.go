@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sparkeexd/hoyoapi/internal/constants"
-	"github.com/sparkeexd/hoyoapi/internal/handler"
+	"github.com/sparkeexd/hoyoapi/constants"
+	"github.com/sparkeexd/hoyoapi/handler"
 )
 
 // Daily reward component.
