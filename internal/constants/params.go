@@ -1,8 +1,5 @@
 package constants
 
-// Game types in HoYoLab.
-type Game string
-
 // Language codes supported in HoYoLab.
 type Language string
 
@@ -10,11 +7,6 @@ type Language string
 type DynamicSecret string
 
 const (
-	// Game types.
-	GAME_GENSHIN   Game = "GENSHIN"
-	GAME_STAR_RAIL Game = "STAR_RAIL"
-	GAME_ZENLESS   Game = "ZENLESS"
-
 	// Languages.
 	LANG_SIMPLIFIED_CHINESE Language = "zh-cn"
 	LANG_TRADIIONAL_CHINESE Language = "zh-tw"
@@ -36,11 +28,6 @@ const (
 	DS_GLOBAL    DynamicSecret = "6s25p5ox5y14umn1p61aqyyvbvvl3lrt"
 	DS_APP_LOGIN DynamicSecret = "IZPgfb0dRPtBeLuFkdDznSZ6f4wWt6y2"
 )
-
-// Stringer.
-func (game Game) String() string {
-	return string(game)
-}
 
 // Stringer.
 func (language Language) String() string {

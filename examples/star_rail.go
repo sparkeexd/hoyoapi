@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/sparkeexd/hoyoapi/client"
-	"github.com/sparkeexd/hoyoapi/utilities"
+	"github.com/sparkeexd/hoyoapi/internal/utilities"
 )
 
 // Claim Star Rail daily rewards.

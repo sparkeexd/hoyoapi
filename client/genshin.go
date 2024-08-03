@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sparkeexd/hoyoapi/constants"
 	"github.com/sparkeexd/hoyoapi/handler"
 	"github.com/sparkeexd/hoyoapi/internal/components"
+	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/internal/errors"
 	"github.com/sparkeexd/hoyoapi/middleware"
 )
@@ -32,7 +32,7 @@ func NewGenshinClient(options ClientOptions) *GenshinClient {
 		Language: options.language,
 		UserId:   options.userId,
 		Daily: components.NewDailyReward(
-			constants.GAME_GENSHIN,
+			components.NewDailyRewardParams(constants.HK4E_API, constants.GenshinEventId, constants.GenshinActId),
 			options.language,
 			handler,
 		),

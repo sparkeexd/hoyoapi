@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/sparkeexd/hoyoapi/client"
-	"github.com/sparkeexd/hoyoapi/utilities"
+	"github.com/sparkeexd/hoyoapi/internal/utilities"
 )
 
 func main() {

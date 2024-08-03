@@ -4,30 +4,47 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sparkeexd/hoyoapi/constants"
 	"github.com/sparkeexd/hoyoapi/handler"
+	"github.com/sparkeexd/hoyoapi/internal/constants"
 )
 
 // Daily reward component.
 // Responsible for getting information of current daily reward status and claiming daily reward.
 type DailyReward struct {
-	game     constants.Game
+	params   DailyRewardParams
 	language string
 	handler  handler.Handler
 }
 
+// Daily reward endpoints are shared across different games with only minor differences to the URL.
+// This struct consolidates the common differences between each game.
+type DailyRewardParams struct {
+	BaseUrl string
+	EventId string
+	ActId   string
+}
+
 // Constructor.
-func NewDailyReward(game constants.Game, language string, handler handler.Handler) DailyReward {
+func NewDailyReward(params DailyRewardParams, language string, handler handler.Handler) DailyReward {
 	return DailyReward{
-		game:     game,
+		params:   params,
 		language: language,
 		handler:  handler,
 	}
 }
 
+// Constructor.
+func NewDailyRewardParams(baseUrl string, eventId string, actId string) DailyRewardParams {
+	return DailyRewardParams{
+		BaseUrl: baseUrl,
+		EventId: eventId,
+		ActId:   actId,
+	}
+}
+
 // Get the list of available daily rewards for the month.
 func (daily DailyReward) List() (map[string]interface{}, error) {
-	endpoint := daily.dailyRewardAPI(daily.game, constants.DAILY_REWARD_HOME)
+	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_HOME)
 	request := handler.NewRequest(endpoint, http.MethodGet).
 		AddParam("lang", daily.language).
 		Build()
@@ -42,7 +59,7 @@ func (daily DailyReward) List() (map[string]interface{}, error) {
 
 // Get information on the current daily reward status.
 func (daily DailyReward) Info() (map[string]interface{}, error) {
-	endpoint := daily.dailyRewardAPI(daily.game, constants.DAILY_REWARD_INFO)
+	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_INFO)
 	request := handler.NewRequest(endpoint, http.MethodGet).
 		AddParam("lang", daily.language).
 		Build()
@@ -57,7 +74,7 @@ func (daily DailyReward) Info() (map[string]interface{}, error) {
 
 // Claim daily reward.
 func (daily DailyReward) Claim() (map[string]interface{}, error) {
-	endpoint := daily.dailyRewardAPI(daily.game, constants.DAILY_REWARD_SIGN)
+	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_SIGN)
 	request := handler.NewRequest(endpoint, http.MethodPost).
 		AddParam("lang", daily.language).
 		Build()
@@ -71,7 +88,6 @@ func (daily DailyReward) Claim() (map[string]interface{}, error) {
 }
 
 // Returns the endpoint for daily rewards.
-func (daily DailyReward) dailyRewardAPI(game constants.Game, endpoint constants.DailyRewardEndpoint) string {
-	params := constants.DailyEndpointParams[game]
+func (daily DailyReward) dailyRewardAPI(params DailyRewardParams, endpoint constants.DailyRewardEndpoint) string {
 	return fmt.Sprintf("%s/event/%s/%s?act_id=%s", params.BaseUrl, params.EventId, endpoint, params.ActId)
 }

@@ -1,9 +1,9 @@
 package client
 
 import (
-	"github.com/sparkeexd/hoyoapi/constants"
 	"github.com/sparkeexd/hoyoapi/handler"
 	"github.com/sparkeexd/hoyoapi/internal/components"
+	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/middleware"
 )
 
@@ -28,7 +28,7 @@ func NewStarRailClient(options ClientOptions) *StarRailClient {
 		Language: options.language,
 		UserId:   options.userId,
 		Daily: components.NewDailyReward(
-			constants.GAME_STAR_RAIL,
+			components.NewDailyRewardParams(constants.PUBLIC_API, constants.StarRailEventId, constants.StarRailActId),
 			options.language,
 			handler,
 		),

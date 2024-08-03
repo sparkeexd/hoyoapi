@@ -3,20 +3,20 @@ package middleware
 import "time"
 
 // A cache item storing any data and a TTL (Time-to-Live) duration.
-type cacheItem struct {
+type CacheItem struct {
 	data any
 	ttl  time.Time
 }
 
 // Constructor.
-func newCacheItem(data any, ttl time.Time) cacheItem {
-	return cacheItem{
+func NewCacheItem(data any, ttl time.Time) CacheItem {
+	return CacheItem{
 		data: data,
 		ttl:  ttl,
 	}
 }
 
-// Returns true if the item has expired.
-func (i cacheItem) expired() bool {
+// Returns true if the item has Expired.
+func (i CacheItem) Expired() bool {
 	return time.Now().After(i.ttl)
 }

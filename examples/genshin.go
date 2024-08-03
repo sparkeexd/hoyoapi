@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/sparkeexd/hoyoapi/client"
-	"github.com/sparkeexd/hoyoapi/constants"
 	"github.com/sparkeexd/hoyoapi/handler"
+	"github.com/sparkeexd/hoyoapi/internal/constants"
+	"github.com/sparkeexd/hoyoapi/internal/utilities"
 	"github.com/sparkeexd/hoyoapi/middleware"
-	"github.com/sparkeexd/hoyoapi/utilities"
 )
 
 // Claim Genshin daily rewards.

@@ -8,7 +8,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/sparkeexd/hoyoapi/constants"
+	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/middleware"
 )
 

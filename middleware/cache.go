@@ -8,7 +8,7 @@ import (
 // Simple in-memory Cache with TTL (Time to Live) support.
 // Intended to be used to store static information e.g., HoYoWiki data.
 type Cache struct {
-	items      map[string]cacheItem
+	items      map[string]CacheItem
 	defaultTTL time.Duration
 	mutex      sync.Mutex
 }
@@ -17,7 +17,7 @@ type Cache struct {
 // Cache has a default TTL of 1 minute.
 func NewCache() *Cache {
 	cache := &Cache{
-		items:      make(map[string]cacheItem),
+		items:      make(map[string]CacheItem),
 		defaultTTL: time.Minute,
 	}
 	return cache
@@ -35,7 +35,7 @@ func (c *Cache) Get(k string) any {
 	defer c.mutex.Unlock()
 
 	if item, exists := c.items[k]; exists {
-		if !item.expired() {
+		if !item.Expired() {
 			return item.data
 		}
 		delete(c.items, k)
@@ -55,7 +55,7 @@ func (c *Cache) Set(k string, v any) {
 func (c *Cache) SetWithTTL(k string, v any, d time.Duration) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
-	c.items[k] = newCacheItem(v, time.Now().Add(d))
+	c.items[k] = NewCacheItem(v, time.Now().Add(d))
 }
 
 // Removes item from the cache.
