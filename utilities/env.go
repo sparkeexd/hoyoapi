@@ -7,21 +7,6 @@ import (
 	"github.com/sparkeexd/hoyoapi/internal/errors"
 )
 
-// Parsed error structure.
-type parseError struct {
-	message string
-}
-
-// Returns the error message during environment variable parsing.
-func (e parseError) Error() string {
-	return e.message
-}
-
-// Helper function for reading strings from the environment.
-func ParseString(input string) (string, error) {
-	return input, nil
-}
-
 // Gets the parsed environment variable.
 // Panics if the value is not found.
 func GetEnv[V any](envKey string, parse func(string) (V, error)) V {
@@ -54,4 +39,9 @@ func getEnv[V any](envKey string, parse func(string) (V, error)) (V, error) {
 	}
 
 	return parsedValue, nil
+}
+
+// Helper function for reading strings from the environment.
+func ParseString(input string) (string, error) {
+	return input, nil
 }

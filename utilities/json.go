@@ -2,16 +2,16 @@ package utilities
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 )
 
 // Print JSON response returned from API.
 // Used for development/debugging purposes.
 func PrintJSON(response map[string]interface{}, err error) {
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	} else {
 		data, _ := json.MarshalIndent(response, "", "    ")
-		fmt.Println(string(data))
+		log.Println(string(data))
 	}
 }
