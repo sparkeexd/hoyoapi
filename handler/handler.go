@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/sparkeexd/hoyoapi/internal/errors"
+	"github.com/sparkeexd/hoyoapi/internal/utilities"
 	"github.com/sparkeexd/hoyoapi/middleware"
 )
 
@@ -40,11 +41,11 @@ func NewHandler(cookie middleware.Cookie) Handler {
 // Sends a HTTP request.
 // Returns a generic map from the unmarshalled response.
 // Specific retcode errors are handled by their respective clients.
-func (handler Handler) Send(request Request) (map[string]interface{}, error) {
+func (handler Handler) Send(request Request, res any) error {
 	// Build HTTP request.
 	httpRequest, err := handler.createHttpRequest(request)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Add cookies.
@@ -55,11 +56,10 @@ func (handler Handler) Send(request Request) (map[string]interface{}, error) {
 	// Send HTTP request.
 	response, err := handler.client.Do(httpRequest)
 	if err != nil {
-		return nil,
-			errors.NewError(
-				errors.HTTP_REQUEST_SEND_ERROR,
-				fmt.Sprintf("URL: %s\nError: %s", request.endpoint, err.Error()),
-			)
+		return errors.NewError(
+			errors.HTTP_REQUEST_SEND_ERROR,
+			fmt.Sprintf("URL: %s\nError: %s", request.endpoint, err.Error()),
+		)
 	}
 
 	defer response.Body.Close()
@@ -67,28 +67,19 @@ func (handler Handler) Send(request Request) (map[string]interface{}, error) {
 	// Parse response body into readable format.
 	body, err := handler.parseResponse(response)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if response.StatusCode != http.StatusOK {
-		return nil,
-			errors.NewError(
-				response.StatusCode,
-				fmt.Sprintf("URL: %s\nError: %+v", request.endpoint, string(body)),
-			)
+		return errors.NewError(
+			response.StatusCode,
+			fmt.Sprintf("URL: %s\nError: %+v", request.endpoint, string(body)),
+		)
 	}
 
-	// Return JSON marshalled response.
-	data := make(map[string]interface{})
-	if err = json.Unmarshal(body, &data); err != nil {
-		return nil,
-			errors.NewError(
-				errors.JSON_DESERIALIZATION_ERROR,
-				fmt.Sprintf("Error: %s", err.Error()),
-			)
-	}
+	utilities.UnmarshalJSON(body, &res)
 
-	return data, nil
+	return err
 }
 
 // Create HTTP request structure.

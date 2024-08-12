@@ -37,6 +37,7 @@ func GetGenshinCharacters(cookie middleware.Cookie) {
 
 	handler := handler.NewHandler(cookie)
 
-	response, err := handler.Send(request)
-	utilities.PrintJSON(response, err)
+	data := make(map[string]interface{})
+	err := handler.Send(request, &data)
+	utilities.PrintJSON(data, err)
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/sparkeexd/hoyoapi/handler"
 	"github.com/sparkeexd/hoyoapi/internal/constants"
+	"github.com/sparkeexd/hoyoapi/models"
 )
 
 // Daily reward component.
@@ -43,48 +44,54 @@ func NewDailyRewardParams(baseUrl string, eventId string, actId string) DailyRew
 }
 
 // Get the list of available daily rewards for the month.
-func (daily DailyReward) List() (map[string]interface{}, error) {
+func (daily DailyReward) List() (models.DailyRewardList, error) {
+	var res models.DailyRewardList
+
 	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_HOME)
 	request := handler.NewRequest(endpoint, http.MethodGet).
 		AddParam("lang", daily.language).
 		Build()
 
-	data, err := daily.handler.Send(request)
+	err := daily.handler.Send(request, &res)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 
-	return data, nil
+	return res, nil
 }
 
 // Get information on the current daily reward status.
-func (daily DailyReward) Info() (map[string]interface{}, error) {
+func (daily DailyReward) Info() (models.DailyRewardInfo, error) {
+	var res models.DailyRewardInfo
+
 	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_INFO)
 	request := handler.NewRequest(endpoint, http.MethodGet).
 		AddParam("lang", daily.language).
 		Build()
 
-	data, err := daily.handler.Send(request)
+	err := daily.handler.Send(request, &res)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 
-	return data, nil
+	return res, nil
 }
 
 // Claim daily reward.
-func (daily DailyReward) Claim() (map[string]interface{}, error) {
+func (daily DailyReward) Claim() (models.DailyRewardClaim, error) {
+	var res models.DailyRewardClaim
+
 	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_SIGN)
 	request := handler.NewRequest(endpoint, http.MethodPost).
 		AddParam("lang", daily.language).
 		Build()
 
-	data, err := daily.handler.Send(request)
+	err := daily.handler.Send(request, &res)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 
-	return data, nil
+	return res, nil
 }
 
 // Returns the endpoint for daily rewards.

@@ -60,7 +60,8 @@ func (genshin GenshinClient) SpiralAbyss(current bool) (map[string]interface{}, 
 		AddLanguage(genshin.Language).
 		Build()
 
-	data, err := genshin.Handler.Send(request)
+	data := make(map[string]interface{})
+	err = genshin.Handler.Send(request, &data)
 	if err != nil {
 		return nil, err
 	}
