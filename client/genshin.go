@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sparkeexd/hoyoapi/handler"
+	"github.com/sparkeexd/hoyoapi/handlers"
 	"github.com/sparkeexd/hoyoapi/internal/components"
 	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/internal/errors"
@@ -15,18 +15,18 @@ import (
 // i.e., Spiral Abyss, Daily Reward
 type GenshinClient struct {
 	Cache    *middleware.Cache
-	Handler  *handler.Handler
+	Handler  *handlers.Handler
 	Language string
 	UserId   int
 	Daily    components.DailyReward
 }
 
 // Constructor.
-func NewGenshinClient(options ClientOptions) *GenshinClient {
+func NewGenshinClient(options ClientOptions) GenshinClient {
 	cookie := middleware.NewCookie(options.ltokenV2, options.ltmidV2, options.ltuidV2)
-	handler := handler.NewHandler(cookie)
+	handler := handlers.NewHandler(cookie)
 
-	return &GenshinClient{
+	return GenshinClient{
 		Handler:  &handler,
 		Cache:    middleware.NewCache(),
 		Language: options.language,
@@ -34,7 +34,7 @@ func NewGenshinClient(options ClientOptions) *GenshinClient {
 		Daily: components.NewDailyReward(
 			components.NewDailyRewardParams(constants.HK4E_API, constants.GenshinEventId, constants.GenshinActId),
 			options.language,
-			handler,
+			&handler,
 		),
 	}
 }
@@ -52,7 +52,7 @@ func (genshin GenshinClient) SpiralAbyss(current bool) (map[string]interface{}, 
 		return nil, err
 	}
 
-	request := handler.NewRequest(constants.GENSHIN_RECORD_SPIRAL_ABYSS_API, http.MethodGet).
+	request := handlers.NewRequest(constants.GENSHIN_RECORD_SPIRAL_ABYSS_API, http.MethodGet).
 		AddParam("role_id", fmt.Sprint(genshin.UserId)).
 		AddParam("server", server.String()).
 		AddParam("schedule_type", fmt.Sprint(scheduleType)).

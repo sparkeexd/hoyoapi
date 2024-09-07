@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sparkeexd/hoyoapi/handler"
+	"github.com/sparkeexd/hoyoapi/handlers"
 	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/models"
 )
@@ -14,7 +14,7 @@ import (
 type DailyReward struct {
 	params   DailyRewardParams
 	language string
-	handler  handler.Handler
+	Handler  *handlers.Handler
 }
 
 // Daily reward endpoints are shared across different games with only minor differences to the URL.
@@ -26,11 +26,11 @@ type DailyRewardParams struct {
 }
 
 // Constructor.
-func NewDailyReward(params DailyRewardParams, language string, handler handler.Handler) DailyReward {
+func NewDailyReward(params DailyRewardParams, language string, handler *handlers.Handler) DailyReward {
 	return DailyReward{
 		params:   params,
 		language: language,
-		handler:  handler,
+		Handler:  handler,
 	}
 }
 
@@ -48,11 +48,11 @@ func (daily DailyReward) List() (models.DailyRewardList, error) {
 	var res models.DailyRewardList
 
 	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_HOME)
-	request := handler.NewRequest(endpoint, http.MethodGet).
+	request := handlers.NewRequest(endpoint, http.MethodGet).
 		AddParam("lang", daily.language).
 		Build()
 
-	err := daily.handler.Send(request, &res)
+	err := daily.Handler.Send(request, &res)
 	if err != nil {
 		return res, err
 	}
@@ -65,11 +65,11 @@ func (daily DailyReward) Info() (models.DailyRewardInfo, error) {
 	var res models.DailyRewardInfo
 
 	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_INFO)
-	request := handler.NewRequest(endpoint, http.MethodGet).
+	request := handlers.NewRequest(endpoint, http.MethodGet).
 		AddParam("lang", daily.language).
 		Build()
 
-	err := daily.handler.Send(request, &res)
+	err := daily.Handler.Send(request, &res)
 	if err != nil {
 		return res, err
 	}
@@ -82,11 +82,11 @@ func (daily DailyReward) Claim() (models.DailyRewardClaim, error) {
 	var res models.DailyRewardClaim
 
 	endpoint := daily.dailyRewardAPI(daily.params, constants.DAILY_REWARD_SIGN)
-	request := handler.NewRequest(endpoint, http.MethodPost).
+	request := handlers.NewRequest(endpoint, http.MethodPost).
 		AddParam("lang", daily.language).
 		Build()
 
-	err := daily.handler.Send(request, &res)
+	err := daily.Handler.Send(request, &res)
 	if err != nil {
 		return res, err
 	}

@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/sparkeexd/hoyoapi/handler"
+	"github.com/sparkeexd/hoyoapi/handlers"
 	"github.com/sparkeexd/hoyoapi/internal/components"
 	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/middleware"
@@ -11,18 +11,18 @@ import (
 // i.e., Daily Reward
 type StarRailClient struct {
 	Cache    *middleware.Cache
-	Handler  *handler.Handler
+	Handler  *handlers.Handler
 	Language string
 	UserId   int
 	Daily    components.DailyReward
 }
 
 // Constructor.
-func NewStarRailClient(options ClientOptions) *StarRailClient {
+func NewStarRailClient(options ClientOptions) StarRailClient {
 	cookie := middleware.NewCookie(options.ltokenV2, options.ltmidV2, options.ltuidV2)
-	handler := handler.NewHandler(cookie)
+	handler := handlers.NewHandler(cookie)
 
-	return &StarRailClient{
+	return StarRailClient{
 		Handler:  &handler,
 		Cache:    middleware.NewCache(),
 		Language: options.language,
@@ -30,7 +30,7 @@ func NewStarRailClient(options ClientOptions) *StarRailClient {
 		Daily: components.NewDailyReward(
 			components.NewDailyRewardParams(constants.PUBLIC_API, constants.StarRailEventId, constants.StarRailActId),
 			options.language,
-			handler,
+			&handler,
 		),
 	}
 }

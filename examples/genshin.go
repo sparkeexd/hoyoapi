@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/sparkeexd/hoyoapi/client"
-	"github.com/sparkeexd/hoyoapi/handler"
+	"github.com/sparkeexd/hoyoapi/handlers"
 	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/internal/utilities"
 	"github.com/sparkeexd/hoyoapi/middleware"
@@ -26,7 +26,7 @@ func GetSpiralAbyssInfo(options client.ClientOptions) {
 
 // Get Genshin characters list in HoYoWiki.
 func GetGenshinCharacters(cookie middleware.Cookie) {
-	request := handler.NewRequest(constants.HOYOWIKI_ENTRY_PAGE_LIST_API, http.MethodPost).
+	request := handlers.NewRequest(constants.HOYOWIKI_ENTRY_PAGE_LIST_API, http.MethodPost).
 		AddReferer("https://wiki.hoyolab.com").
 		AddBody("filters", []string{}).
 		AddBody("menu_id", 2).    // Genshin Character List
@@ -35,7 +35,7 @@ func GetGenshinCharacters(cookie middleware.Cookie) {
 		AddBody("use_es", true).
 		Build()
 
-	handler := handler.NewHandler(cookie)
+	handler := handlers.NewHandler(cookie)
 
 	data := make(map[string]interface{})
 	err := handler.Send(request, &data)
