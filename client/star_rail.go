@@ -18,11 +18,11 @@ type StarRailClient struct {
 }
 
 // Constructor.
-func NewStarRailClient(options ClientOptions) StarRailClient {
+func NewStarRailClient(options ClientOptions) *StarRailClient {
 	cookie := middleware.NewCookie(options.ltokenV2, options.ltmidV2, options.ltuidV2)
 	handler := handlers.NewHandler(cookie)
 
-	return StarRailClient{
+	return &StarRailClient{
 		Handler:  &handler,
 		Cache:    middleware.NewCache(),
 		Language: options.language,

@@ -17,11 +17,11 @@ type ZenlessClient struct {
 }
 
 // Constructor.
-func NewZenlessClient(options ClientOptions) ZenlessClient {
+func NewZenlessClient(options ClientOptions) *ZenlessClient {
 	cookie := middleware.NewCookie(options.ltokenV2, options.ltmidV2, options.ltuidV2)
 	handler := handlers.NewHandler(cookie)
 
-	return ZenlessClient{
+	return &ZenlessClient{
 		Handler:  &handler,
 		Language: options.language,
 		UserId:   options.userId,

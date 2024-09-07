@@ -22,11 +22,11 @@ type GenshinClient struct {
 }
 
 // Constructor.
-func NewGenshinClient(options ClientOptions) GenshinClient {
+func NewGenshinClient(options ClientOptions) *GenshinClient {
 	cookie := middleware.NewCookie(options.ltokenV2, options.ltmidV2, options.ltuidV2)
 	handler := handlers.NewHandler(cookie)
 
-	return GenshinClient{
+	return &GenshinClient{
 		Handler:  &handler,
 		Cache:    middleware.NewCache(),
 		Language: options.language,
