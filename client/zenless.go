@@ -1,34 +1,31 @@
 package client
 
 import (
-	"github.com/sparkeexd/hoyoapi/handlers"
 	"github.com/sparkeexd/hoyoapi/internal/components"
 	"github.com/sparkeexd/hoyoapi/internal/constants"
-	"github.com/sparkeexd/hoyoapi/middleware"
+	"github.com/sparkeexd/hoyoapi/services"
 )
 
 // Client that interfaces to HoYoLab endpoints related to Zenless Zone Zero.
 // i.e., Daily Reward
 type ZenlessClient struct {
-	Handler  *handlers.Handler
+	Handler  services.Handler
 	Language string
-	UserId   int
 	Daily    components.DailyReward
 }
 
 // Constructor.
-func NewZenlessClient(options ClientOptions) *ZenlessClient {
-	cookie := middleware.NewCookie(options.ltokenV2, options.ltmidV2, options.ltuidV2)
-	handler := handlers.NewHandler(cookie)
+func NewZenlessClient() *ZenlessClient {
+	language := constants.LANG_ENGLISH.String()
+	handler := services.NewHandler()
 
 	return &ZenlessClient{
-		Handler:  &handler,
-		Language: options.language,
-		UserId:   options.userId,
+		Handler:  handler,
+		Language: language,
 		Daily: components.NewDailyReward(
 			components.NewDailyRewardParams(constants.ACT_API, constants.ZenlessEventId, constants.ZenlessActId),
-			options.language,
-			&handler,
+			language,
+			handler,
 		),
 	}
 }

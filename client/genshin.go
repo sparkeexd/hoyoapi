@@ -4,75 +4,92 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sparkeexd/hoyoapi/handlers"
 	"github.com/sparkeexd/hoyoapi/internal/components"
 	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/internal/errors"
-	"github.com/sparkeexd/hoyoapi/middleware"
+	"github.com/sparkeexd/hoyoapi/models"
+	"github.com/sparkeexd/hoyoapi/services"
 )
 
 // Client that interfaces to HoYoLab endpoints related to Genshin Impact.
 // i.e., Spiral Abyss, Daily Reward
 type GenshinClient struct {
-	Cache    *middleware.Cache
-	Handler  *handlers.Handler
 	Language string
-	UserId   int
 	Daily    components.DailyReward
+	handler  services.Handler
 }
 
 // Constructor.
-func NewGenshinClient(options ClientOptions) *GenshinClient {
-	cookie := middleware.NewCookie(options.ltokenV2, options.ltmidV2, options.ltuidV2)
-	handler := handlers.NewHandler(cookie)
+func NewGenshinClient() *GenshinClient {
+	language := constants.LANG_ENGLISH.String()
+	handler := services.NewHandler()
 
 	return &GenshinClient{
-		Handler:  &handler,
-		Cache:    middleware.NewCache(),
-		Language: options.language,
-		UserId:   options.userId,
+		handler:  handler,
+		Language: language,
 		Daily: components.NewDailyReward(
 			components.NewDailyRewardParams(constants.HK4E_API, constants.GenshinEventId, constants.GenshinActId),
-			options.language,
-			&handler,
+			language,
+			handler,
 		),
 	}
 }
 
 // Get current Spiral Abyss information.
 // Set current argument to false to get previous cycle's information.
-func (genshin GenshinClient) SpiralAbyss(current bool) (map[string]interface{}, error) {
+func (genshin GenshinClient) SpiralAbyss(cookie services.Cookie, userId int, current bool) (models.SpiralAbyss, error) {
+	var res models.SpiralAbyss
+
 	scheduleType := 1
 	if !current {
 		scheduleType = 2
 	}
 
-	server, err := genshin.getRegion()
+	server, err := genshin.getRegion(userId)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 
-	request := handlers.NewRequest(constants.GENSHIN_RECORD_SPIRAL_ABYSS_API, http.MethodGet).
-		AddParam("role_id", fmt.Sprint(genshin.UserId)).
+	request := services.NewRequest(constants.GENSHIN_RECORD_SPIRAL_ABYSS_API, http.MethodGet, cookie).
+		AddParam("role_id", fmt.Sprint(userId)).
 		AddParam("server", server.String()).
 		AddParam("schedule_type", fmt.Sprint(scheduleType)).
 		AddDynamicSecret(constants.DS_GLOBAL).
 		AddLanguage(genshin.Language).
 		Build()
 
-	data := make(map[string]interface{})
-	err = genshin.Handler.Send(request, &data)
+	err = genshin.handler.Send(request, &res)
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 
-	return data, nil
+	return res, nil
+}
+
+func (genshin GenshinClient) Characters(cookie services.Cookie) (models.GenshinCharacters, error) {
+	request := services.NewRequest(constants.HOYOWIKI_ENTRY_PAGE_LIST_API, http.MethodPost, cookie).
+		AddReferer("https://wiki.hoyolab.com").
+		AddBody("filters", []string{}).
+		AddBody("menu_id", 2).    // Genshin Character List
+		AddBody("page_num", 1).   // Pagination
+		AddBody("page_size", 30). // Number of items returned
+		AddBody("use_es", true).
+		Build()
+
+	var res models.GenshinCharacters
+	err := genshin.handler.Send(request, &res)
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
 }
 
 // Get Genshin regional server code based off the user ID.
-func (genshin GenshinClient) getRegion() (*constants.GenshinRegion, error) {
+func (genshin GenshinClient) getRegion(userId int) (*constants.GenshinRegion, error) {
 	// Get 1st digit of user ID to determine the region.
-	i := genshin.UserId
+	i := userId
 	for i >= 10 {
 		i /= 10
 	}
@@ -82,7 +99,7 @@ func (genshin GenshinClient) getRegion() (*constants.GenshinRegion, error) {
 		return nil,
 			errors.NewError(
 				errors.REGION_SERVER_CODE_ERROR,
-				fmt.Sprintf("Genshin regional server code not found for UID %d", genshin.UserId),
+				fmt.Sprintf("Genshin regional server code not found for UID %d", userId),
 			)
 	}
 

@@ -1,43 +1,32 @@
 package main
 
 import (
-	"net/http"
+	"strconv"
 
 	"github.com/sparkeexd/hoyoapi/client"
-	"github.com/sparkeexd/hoyoapi/handlers"
-	"github.com/sparkeexd/hoyoapi/internal/constants"
 	"github.com/sparkeexd/hoyoapi/internal/utilities"
-	"github.com/sparkeexd/hoyoapi/middleware"
+	"github.com/sparkeexd/hoyoapi/services"
 )
 
 // Claim Genshin daily rewards.
-func GenshinDailyReward(options client.ClientOptions) {
-	genshin := client.NewGenshinClient(options)
-	response, err := genshin.Daily.Claim()
+func GenshinDailyReward(cookie services.Cookie) {
+	genshin := client.NewGenshinClient()
+	response, err := genshin.Daily.Claim(cookie)
 	utilities.PrintJSON(response, err)
 }
 
 // Get Spiral Abyss information.
-func GetSpiralAbyssInfo(options client.ClientOptions) {
-	genshin := client.NewGenshinClient(options)
-	response, err := genshin.SpiralAbyss(true)
+func GenshinSpiralAbyssInfo(cookie services.Cookie) {
+	genshin := client.NewGenshinClient()
+	userId := utilities.GetEnv("GENSHIN_UID", strconv.Atoi)
+
+	response, err := genshin.SpiralAbyss(cookie, userId, true)
 	utilities.PrintJSON(response, err)
 }
 
 // Get Genshin characters list in HoYoWiki.
-func GetGenshinCharacters(cookie middleware.Cookie) {
-	request := handlers.NewRequest(constants.HOYOWIKI_ENTRY_PAGE_LIST_API, http.MethodPost).
-		AddReferer("https://wiki.hoyolab.com").
-		AddBody("filters", []string{}).
-		AddBody("menu_id", 2).    // Genshin Character List
-		AddBody("page_num", 1).   // Pagination
-		AddBody("page_size", 30). // Number of items returned
-		AddBody("use_es", true).
-		Build()
-
-	handler := handlers.NewHandler(cookie)
-
-	data := make(map[string]interface{})
-	err := handler.Send(request, &data)
-	utilities.PrintJSON(data, err)
+func GetGenshinCharacters(cookie services.Cookie) {
+	genshin := client.NewGenshinClient()
+	response, err := genshin.Characters(cookie)
+	utilities.PrintJSON(response, err)
 }

@@ -1,4 +1,4 @@
-package handlers
+package services
 
 import (
 	"crypto/md5"
@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/sparkeexd/hoyoapi/internal/constants"
-	"github.com/sparkeexd/hoyoapi/middleware"
 )
 
 const (
@@ -27,6 +26,7 @@ type Request struct {
 	body     map[string]interface{}
 	params   map[string]string
 	headers  map[string]string
+	cookie   Cookie
 }
 
 // Request builder that defines a request structure using the builder pattern.
@@ -35,11 +35,12 @@ type RequestBuilder struct {
 }
 
 // Constructor.
-func NewRequest(endpoint string, method string) *RequestBuilder {
+func NewRequest(endpoint string, method string, cookie Cookie) *RequestBuilder {
 	builder := &RequestBuilder{
 		request: Request{
 			endpoint: endpoint,
 			method:   method,
+			cookie:   cookie,
 		},
 	}
 
@@ -55,6 +56,7 @@ func (builder *RequestBuilder) Build() Request {
 		body:     maps.Clone(builder.request.body),
 		params:   maps.Clone(builder.request.params),
 		headers:  maps.Clone(builder.request.headers),
+		cookie:   builder.request.cookie,
 	}
 }
 
@@ -89,7 +91,7 @@ func (builder *RequestBuilder) AddHeader(key string, value string) *RequestBuild
 }
 
 // Add cookie to request header.
-func (builder *RequestBuilder) AddCookie(cookie middleware.Cookie) *RequestBuilder {
+func (builder *RequestBuilder) AddCookie(cookie Cookie) *RequestBuilder {
 	return builder.AddHeader("Cookie", cookie.ParseCookie())
 }
 

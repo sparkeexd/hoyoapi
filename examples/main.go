@@ -1,10 +1,8 @@
 package main
 
 import (
-	"strconv"
-
-	"github.com/sparkeexd/hoyoapi/client"
 	"github.com/sparkeexd/hoyoapi/internal/utilities"
+	"github.com/sparkeexd/hoyoapi/services"
 )
 
 func main() {
@@ -12,16 +10,9 @@ func main() {
 	ltmidV2 := utilities.GetEnv("LTMID_V2", utilities.ParseString)
 	ltuidV2 := utilities.GetEnv("LTUID_V2", utilities.ParseString)
 
-	language := "en-us"
-	userId := utilities.GetEnv("GENSHIN_UID", strconv.Atoi)
+	cookie := services.NewCookie(ltokenV2, ltmidV2, ltuidV2)
 
-	options := client.NewClientOptions().
-		AddCookie(ltokenV2, ltmidV2, ltuidV2).
-		AddLanguage(language).
-		AddUserId(userId).
-		Build()
-
-	GenshinDailyReward(options)
-	StarRailDailyReward(options)
-	ZenlessDailyReward(options)
+	GenshinDailyReward(cookie)
+	StarRailDailyReward(cookie)
+	ZenlessDailyReward(cookie)
 }

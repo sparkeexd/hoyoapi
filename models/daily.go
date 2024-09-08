@@ -1,6 +1,6 @@
 package models
 
-/// Daily reward list response structure.
+// Daily reward list response structure.
 type DailyRewardList struct {
 	Data struct {
 		Awards []struct {
@@ -16,7 +16,7 @@ type DailyRewardList struct {
 	Retcode int    `json:"retcode"`
 }
 
-/// Daily reward info response structure.
+// Daily reward info response structure.
 type DailyRewardInfo struct {
 	Data struct {
 		FirstBind    bool   `json:"first_bind"`
@@ -31,7 +31,7 @@ type DailyRewardInfo struct {
 	Retcode int    `json:"retcode"`
 }
 
-/// Daily reward claim response structure.
+// Daily reward claim response structure.
 type DailyRewardClaim struct {
 	Retcode int    `json:"retcode"`
 	Message string `json:"message"`

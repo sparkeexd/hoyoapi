@@ -1,4 +1,4 @@
-package handlers
+package services
 
 import (
 	"bytes"
@@ -12,7 +12,6 @@ import (
 
 	"github.com/sparkeexd/hoyoapi/internal/errors"
 	"github.com/sparkeexd/hoyoapi/internal/utilities"
-	"github.com/sparkeexd/hoyoapi/middleware"
 )
 
 // Default HTTP client timeout duration.
@@ -22,11 +21,10 @@ const clientDefaultTimeout = 10 * time.Second
 // This ranges from sending HTTP requests to HoYoLab endpoints, parsing responses, and setting cookies.
 type Handler struct {
 	client http.Client
-	middleware.Cookie
 }
 
 // Constructor.
-func NewHandler(cookie middleware.Cookie) Handler {
+func NewHandler() Handler {
 	client := http.DefaultClient
 	client.Timeout = clientDefaultTimeout
 	client.Transport = &http.Transport{
@@ -34,7 +32,7 @@ func NewHandler(cookie middleware.Cookie) Handler {
 		MaxIdleConnsPerHost: 2,
 	}
 
-	handler := Handler{client: *client, Cookie: cookie}
+	handler := Handler{client: *client}
 	return handler
 }
 
@@ -49,7 +47,7 @@ func (handler Handler) Send(request Request, res any) error {
 	}
 
 	// Add cookies.
-	for _, token := range handler.Tokens() {
+	for _, token := range request.cookie.Tokens() {
 		httpRequest.AddCookie(&token)
 	}
 
