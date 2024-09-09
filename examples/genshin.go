@@ -17,16 +17,9 @@ func GenshinDailyReward(cookie services.Cookie) {
 
 // Get Spiral Abyss information.
 func GenshinSpiralAbyssInfo(cookie services.Cookie) {
-	genshin := client.NewGenshinClient()
-	userId := utilities.GetEnv("GENSHIN_UID", strconv.Atoi)
+	userID := utilities.GetEnv("GENSHIN_UID", strconv.Atoi)
 
-	response, err := genshin.SpiralAbyss(cookie, userId, true)
-	utilities.PrintJSON(response, err)
-}
-
-// Get Genshin characters list in HoYoWiki.
-func GetGenshinCharacters(cookie services.Cookie) {
 	genshin := client.NewGenshinClient()
-	response, err := genshin.Characters(cookie)
+	response, err := genshin.SpiralAbyss(cookie, userID, true)
 	utilities.PrintJSON(response, err)
 }

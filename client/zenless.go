@@ -23,7 +23,7 @@ func NewZenlessClient() *ZenlessClient {
 		Handler:  handler,
 		Language: language,
 		Daily: components.NewDailyReward(
-			components.NewDailyRewardParams(constants.ACT_API, constants.ZenlessEventId, constants.ZenlessActId),
+			components.NewDailyRewardParams(constants.ACT_API, constants.ZenlessEventID, constants.ZenlessActID),
 			language,
 			handler,
 		),

@@ -23,7 +23,7 @@ func NewStarRailClient() *StarRailClient {
 		Handler:  handler,
 		Language: language,
 		Daily: components.NewDailyReward(
-			components.NewDailyRewardParams(constants.PUBLIC_API, constants.StarRailEventId, constants.StarRailActId),
+			components.NewDailyRewardParams(constants.PUBLIC_API, constants.StarRailEventID, constants.StarRailActID),
 			language,
 			handler,
 		),

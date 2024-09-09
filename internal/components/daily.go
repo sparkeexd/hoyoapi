@@ -21,8 +21,8 @@ type DailyReward struct {
 // This struct consolidates the common differences between each game.
 type DailyRewardParams struct {
 	BaseUrl string
-	EventId string
-	ActId   string
+	EventID string
+	ActID   string
 }
 
 // Constructor.
@@ -35,11 +35,11 @@ func NewDailyReward(params DailyRewardParams, language string, handler services.
 }
 
 // Constructor.
-func NewDailyRewardParams(baseUrl string, eventId string, actId string) DailyRewardParams {
+func NewDailyRewardParams(baseUrl string, eventID string, actID string) DailyRewardParams {
 	return DailyRewardParams{
 		BaseUrl: baseUrl,
-		EventId: eventId,
-		ActId:   actId,
+		EventID: eventID,
+		ActID:   actID,
 	}
 }
 
@@ -96,5 +96,5 @@ func (daily DailyReward) Claim(cookie services.Cookie) (models.DailyRewardClaim,
 
 // Returns the endpoint for daily rewards.
 func (daily DailyReward) dailyRewardAPI(params DailyRewardParams, endpoint constants.DailyRewardEndpoint) string {
-	return fmt.Sprintf("%s/event/%s/%s?act_id=%s", params.BaseUrl, params.EventId, endpoint, params.ActId)
+	return fmt.Sprintf("%s/event/%s/%s?act_id=%s", params.BaseUrl, params.EventID, endpoint, params.ActID)
 }

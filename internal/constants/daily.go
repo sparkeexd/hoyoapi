@@ -10,16 +10,16 @@ const (
 	DAILY_REWARD_SIGN DailyRewardEndpoint = "sign"
 
 	// Genshin endpoint parameters.
-	GenshinEventId = "sol"
-	GenshinActId   = "e202102251931481"
+	GenshinEventID = "sol"
+	GenshinActID   = "e202102251931481"
 
 	// Star Rail endpoint parameters.
-	StarRailEventId = "luna/os"
-	StarRailActId   = "e202303301540311"
+	StarRailEventID = "luna/os"
+	StarRailActID   = "e202303301540311"
 
 	// Zenless endpoint parameters.
-	ZenlessEventId = "luna/zzz/os"
-	ZenlessActId   = "e202406031448091"
+	ZenlessEventID = "luna/zzz/os"
+	ZenlessActID   = "e202406031448091"
 )
 
 // Stringer.

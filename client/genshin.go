@@ -28,7 +28,7 @@ func NewGenshinClient() *GenshinClient {
 		handler:  handler,
 		Language: language,
 		Daily: components.NewDailyReward(
-			components.NewDailyRewardParams(constants.HK4E_API, constants.GenshinEventId, constants.GenshinActId),
+			components.NewDailyRewardParams(constants.HK4E_API, constants.GenshinEventID, constants.GenshinActID),
 			language,
 			handler,
 		),
@@ -37,7 +37,7 @@ func NewGenshinClient() *GenshinClient {
 
 // Get current Spiral Abyss information.
 // Set current argument to false to get previous cycle's information.
-func (genshin GenshinClient) SpiralAbyss(cookie services.Cookie, userId int, current bool) (models.SpiralAbyss, error) {
+func (genshin GenshinClient) SpiralAbyss(cookie services.Cookie, userID int, current bool) (models.SpiralAbyss, error) {
 	var res models.SpiralAbyss
 
 	scheduleType := 1
@@ -45,13 +45,13 @@ func (genshin GenshinClient) SpiralAbyss(cookie services.Cookie, userId int, cur
 		scheduleType = 2
 	}
 
-	server, err := genshin.getRegion(userId)
+	server, err := genshin.getRegion(userID)
 	if err != nil {
 		return res, err
 	}
 
 	request := services.NewRequest(constants.GENSHIN_RECORD_SPIRAL_ABYSS_API, http.MethodGet, cookie).
-		AddParam("role_id", fmt.Sprint(userId)).
+		AddParam("role_id", fmt.Sprint(userID)).
 		AddParam("server", server.String()).
 		AddParam("schedule_type", fmt.Sprint(scheduleType)).
 		AddDynamicSecret(constants.DS_GLOBAL).
@@ -66,30 +66,10 @@ func (genshin GenshinClient) SpiralAbyss(cookie services.Cookie, userId int, cur
 	return res, nil
 }
 
-func (genshin GenshinClient) Characters(cookie services.Cookie) (models.GenshinCharacters, error) {
-	request := services.NewRequest(constants.HOYOWIKI_ENTRY_PAGE_LIST_API, http.MethodPost, cookie).
-		AddReferer("https://wiki.hoyolab.com").
-		AddBody("filters", []string{}).
-		AddBody("menu_id", 2).    // Genshin Character List
-		AddBody("page_num", 1).   // Pagination
-		AddBody("page_size", 30). // Number of items returned
-		AddBody("use_es", true).
-		Build()
-
-	var res models.GenshinCharacters
-	err := genshin.handler.Send(request, &res)
-
-	if err != nil {
-		return res, err
-	}
-
-	return res, nil
-}
-
 // Get Genshin regional server code based off the user ID.
-func (genshin GenshinClient) getRegion(userId int) (*constants.GenshinRegion, error) {
+func (genshin GenshinClient) getRegion(userID int) (*constants.GenshinRegion, error) {
 	// Get 1st digit of user ID to determine the region.
-	i := userId
+	i := userID
 	for i >= 10 {
 		i /= 10
 	}
@@ -99,7 +79,7 @@ func (genshin GenshinClient) getRegion(userId int) (*constants.GenshinRegion, er
 		return nil,
 			errors.NewError(
 				errors.REGION_SERVER_CODE_ERROR,
-				fmt.Sprintf("Genshin regional server code not found for UID %d", userId),
+				fmt.Sprintf("Genshin regional server code not found for UID %d", userID),
 			)
 	}
 

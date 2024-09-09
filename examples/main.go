@@ -12,7 +12,7 @@ func main() {
 
 	cookie := services.NewCookie(ltokenV2, ltmidV2, ltuidV2)
 
-	GenshinDailyReward(cookie)
+	GenshinSpiralAbyssInfo(cookie)
 	StarRailDailyReward(cookie)
 	ZenlessDailyReward(cookie)
 }

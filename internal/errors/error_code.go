@@ -14,6 +14,7 @@ const (
 	REGION_SERVER_CODE_ERROR
 	ENV_VARIABLE_READ_ERROR
 	ENV_VARIABLE_PARSE_ERROR
+	NULLABLE_VALUE_ERROR
 )
 
 // Internal error code text.
@@ -28,6 +29,7 @@ var errorCodeText = map[int]string{
 	REGION_SERVER_CODE_ERROR:   "Region Server Code Error",
 	ENV_VARIABLE_READ_ERROR:    "Environment Variable Read Error",
 	ENV_VARIABLE_PARSE_ERROR:   "Environment Variable Parse Error",
+	NULLABLE_VALUE_ERROR:       "Nullable Value Error",
 }
 
 // Returns a text for the internal error code.
